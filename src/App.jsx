@@ -7,6 +7,7 @@ function App() {
   const [translatedText, setTranslatedText] = useState("");
   const [sourceLang, setSourceLang] = useState("id");
   const [targetLang, setTargetLang] = useState("en");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleTranslate = async () => {
     // Tentukan nama bahasa sesuai dengan kode
@@ -15,6 +16,8 @@ function App() {
       en: "English",
       ar: "Arabic",
     };
+
+    setIsLoading(true);
 
     // Buat prompt untuk ChatGPT
     const prompt = `Terjemahkan teks berikut dari ${langNames[sourceLang]} ke ${langNames[targetLang]}:\n\n${inputText}`;
@@ -34,7 +37,9 @@ function App() {
           },
         },
       );
+      // setIsLoading(true);
       setTranslatedText(response.data.choices[0].message.content.trim());
+      setIsLoading(false);
     } catch (error) {
       console.error("Error saat menerjemahkan:", error);
       setTranslatedText("Terjadi kesalahan pada penerjemahan.");
@@ -93,7 +98,7 @@ function App() {
             Hasil Terjemahan:
           </h2>
           <p className="bg-gray-700 text-white border border-gray-600 rounded-lg p-3">
-            {translatedText}
+            {isLoading ? "LOADING..." : translatedText}
           </p>
         </div>
       </div>
